@@ -1,0 +1,12 @@
+= Data Access Abstraction (dax) Gem
+
+This gem provides an abstraction layer with a consistent API around access files
+in your ruby application. Files are stored in one or more "file silos" each of
+which may abstract access to a cloud file storage service, a remote server, a
+version control system (VCS), or a local file-system directory.
+
+The goal is to support all the major cloud services, remote file access
+protocols, and VCS/SCM systems in addition to local file-system access. Also,
+there will be a "managed" local file-system "file silo" type as well that will
+manage file storage and provide extra features beyond those provided by simply
+accessing the file-system directly.
