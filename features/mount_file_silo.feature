@@ -15,7 +15,6 @@ Feature: Mount file silo
     The Dax::FileSilo instance is a Dax::FileSilo::DirectFileSystem sub-type.
 
     Given a local directory named "direct"
-    When I mount it using a direct, file-system silo
-    And I name the file silo "test"
+    When I mount the local directory using a direct, file-system silo, naming it "test"
     Then I can access a direct, file-system silo named "test"
 
