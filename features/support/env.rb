@@ -4,6 +4,18 @@ TEST_ROOT    = File.join(PROJECT_ROOT, 'test')
 $:.push File.join(PROJECT_ROOT, 'lib')
 require 'dax'
 
+module TestApps
+  BASE = File.expand_path(File.join('..', '..', '..', 'test', 'apps'), __FILE__).freeze
+
+  def active_record_test_app
+    require File.join(BASE, 'active_record_test_app')
+    @active_record_test_app ||= ActiveRecordTestApp.new
+  end
+
+end
+
+World(TestApps)
+
 module LocalFileStoreSetup
 
   def prepare_local_directory(name)
@@ -14,3 +26,4 @@ module LocalFileStoreSetup
 
 end
 World(LocalFileStoreSetup)
+

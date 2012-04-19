@@ -22,7 +22,10 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- features/*`.split("\n")
   s.require_paths = %w{ lib }
 
-  s.add_development_dependency "bundler",  "~> 1.1.3"
-  s.add_development_dependency "rake",     "~> 0.9.2"
-  s.add_development_dependency "cucumber", "~> 1.1.9"
+  s.add_development_dependency "bundler",      "~> 1.1.3"
+  s.add_development_dependency "rake",         "~> 0.9.2"
+  s.add_development_dependency "cucumber",     "~> 1.1.9"
+  s.add_development_dependency "rspec",        "~> 2.9.0"
+  s.add_development_dependency "activerecord", "~> 3.2.3"
+  s.add_development_dependency "sqlite3",      "~> 1.3.6"
 end
