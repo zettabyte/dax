@@ -1,4 +1,12 @@
 # encoding: utf-8
+
+Given /^dax is configured with ActiveRecord models$/ do
+  Dax.config do |config|
+    config.silo_class = active_record_test_app.nested_class(:DaxSilo)
+    config.file_class = active_record_test_app.nested_class(:DaxFile)
+  end
+end
+
 Given /^a local directory named "([^"]*)"$/ do |name|
   prepare_local_directory(name)
 end

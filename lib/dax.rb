@@ -23,12 +23,11 @@ class Dax
     end
 
     def mount(name, location)
-      Silo.mount(name, location)
+      @silo_class.mount(name, location)
     end
 
-    def silo(name)
-      Silo.find(name)
+    def [](name)
+      @silo_class.silo(name)
     end
-
   end
 end

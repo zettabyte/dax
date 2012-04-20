@@ -4,14 +4,15 @@ require 'spec_helper'
 class Dax
   describe Silo do
     describe ".mount" do
-      it "creates a Dax::Silo instance and saves it with the provided name and options, returning it" do
-        silo = Silo.mount("test", "test")
-        silo.should == Silo.find("test")
+      it "creates a silo instance and saves it with the provided name and location, returning it" do
+        pending "figure out how to test module methods mixed into a real class"
       end
     end
 
-    describe ".find" do
-      it "loads and returns the Dax::Silo instance with the provided name, if any, returning nil otherwise"
+    describe ".silo" do
+      it "searches for  and returns the named silo instance" do
+        pending "figure out how to test module methods mixed into a real class"
+      end
     end
   end
 end

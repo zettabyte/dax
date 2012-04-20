@@ -4,6 +4,9 @@ Feature: Mount silo
   As a ruby application developer
   I want to mount a silo
 
+  Background:
+    Given dax is configured with ActiveRecord models
+
   Scenario: Mount a silo
 
     Given a local directory named "direct"
