@@ -1,5 +1,5 @@
 # encoding: utf-8
-module Dax
+class Dax
   module Version
     MAJOR = 0
     MINOR = 0
