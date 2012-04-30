@@ -1,21 +1,6 @@
 # encoding: utf-8
 require 'spec_helper'
 
-class SiloStub
-  def initialize(params)
-    @name, @location = params[:name], params[:location]
-  end
-
-  attr_reader :name
-
-  def save!
-  end
-
-  def self.find_by_name(name)
-    new(:name => name)
-  end
-end
-
 describe Dax do
   describe ".config" do
     it "accepts a block which it calls, passing a 'config' object" do
@@ -55,10 +40,13 @@ describe Dax do
 
   describe ".mount" do
     it "creates a silo instance and saves it with the provided name and location, returning it" do
+      name, location = 'name', 'location'
       Dax.silo_class = SiloStub
       SiloStub.any_instance.should_receive(:save!)
-      silo = Dax.mount('name', 'location')
+      silo = Dax.mount(name, location)
       silo.should be_an_instance_of(SiloStub)
+      silo.name.should == name
+      silo.location.should == location
     end
   end
 
