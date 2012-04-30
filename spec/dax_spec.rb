@@ -1,6 +1,21 @@
 # encoding: utf-8
 require 'spec_helper'
 
+class SiloStub
+  def initialize(params)
+    @name, @location = params[:name], params[:location]
+  end
+
+  attr_reader :name
+
+  def save!
+  end
+
+  def self.find_by_name(name)
+    new(:name => name)
+  end
+end
+
 describe Dax do
   describe ".config" do
     it "accepts a block which it calls, passing a 'config' object" do
@@ -40,21 +55,21 @@ describe Dax do
 
   describe ".mount" do
     it "creates a silo instance and saves it with the provided name and location, returning it" do
-      # TODO: clean this test up. Just use one of the test apps?
-      name, location = "test", "test"
-      Dax.silo_class = Class.new do
-        def initialize(args) ; @args = [args[:name], args[:location]] ; end
-        def save! ; @args ; end
-      end
-      Dax.silo_class.any_instance.should_receive(:save!).and_return([name, location])
-      silo = Dax.mount(name, location)
-      silo.should be
+      Dax.silo_class = SiloStub
+      SiloStub.any_instance.should_receive(:save!)
+      silo = Dax.mount('name', 'location')
+      silo.should be_an_instance_of(SiloStub)
     end
   end
 
   describe ".[]" do
     it "searches for and returns the named silo" do
-      pending
+      name = 'test'
+      Dax.silo_class = SiloStub
+      Dax.mount(name, 'location')
+      silo = Dax[name]
+      silo.should be_an_instance_of(SiloStub)
+      silo.name.should == name
     end
   end
 end
