@@ -6,6 +6,10 @@ class TestAppsBase
 
   class << self
 
+    def setup
+      @instance ||= new
+    end
+
     def app_name
       @app_name ||= name.underscore.freeze
     end

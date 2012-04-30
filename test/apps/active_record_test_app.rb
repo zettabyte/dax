@@ -23,6 +23,7 @@ class ActiveRecordTestApp < TestAppsBase
   def migrate!
     drop_database!
     connect!
+    ActiveRecord::Migration.verbose = false
     Migration.migrate(:up)
   end
 

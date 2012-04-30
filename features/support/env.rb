@@ -9,7 +9,7 @@ module TestApps
 
   def active_record_test_app
     require File.join(BASE, 'active_record_test_app')
-    @active_record_test_app ||= ActiveRecordTestApp.new
+    @active_record_test_app ||= ActiveRecordTestApp.setup
   end
 
 end
