@@ -24,3 +24,20 @@ Then /^it refers to the local directory$/ do
   @silo.location.should == local_directory
 end
 
+Given /^a simple silo named "([^"]*)" has mounted a local directory named "([^"]*)"$/ do |name, location|
+  Dax.mount(name, location)
+end
+
+Given /^a file named "([^"]*)", located in "([^"]*)" in silo "([^"]*)"$/ do |filename, location, silo|
+  @silo = Dax[silo]
+  @silo.add(location, filename)
+end
+
+When /^I read the entire contents of the file$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then /^I should have a data buffer containing the following text in unix format$/ do |string|
+  pending # express the regexp above with the code you wish you had
+end
+

@@ -1,0 +1,3 @@
+Line 1: file is "subdir-a/small-ascii-unix.txt"
+Line 2: another line of ASCII text
+Line 3: UNIX <LF> seperate lines

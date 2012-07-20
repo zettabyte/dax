@@ -1,0 +1,95 @@
+OpenStack
+  Authentication
+    username
+    key
+    You authenticate against an authentication server and a session is initiated.
+    The session lasts 24-hours and, for the duration, you send all API REST calls
+    against a returned, session-specific "storage URL", passing a returned,
+    session-specific "auth token" with each API call.
+  Session
+    24 hour duration
+    storage URL
+    auth token
+  Storage
+    files called "objects"
+    locations called "containers"
+    no "root-level" storage of objects possible
+    no actual nesting of containers
+    however, nesting can be simulated by employing a separator character in object names, such as "/"
+    container names cannot have "/" characters in them
+    object names have no character restrictions
+    container names cannot be longer than 256-bytes long after the UTF-8 name is url-encoded
+    object names cannot be longer than 1024-bytes after the UTF-8 name is url-encoded
+    unlimited number of containers (namespace provides limit)
+    unlimited number of objects (namespace provides limit)
+    objects larger than 5GB are supported by "segmenting" them:
+      - file broken up into parts, called "segments", each no larger than 5GB
+      - the segments are created/stored as regular objects (and are always inividually accessible)
+      - however, all segment objects must be stored in the same container to create a large "logical" object
+      - the segment objects must be named so that they all share a common prefix
+      - the segment objects' names (the part after the prefix) must chosen so that the objects, if listed, show up in the proper concatenation order
+      - an empty, 0-byte object is created, called the "manifest", which represents the "logical", concatenated object
+      - the manifest is denoted as such by providing a special header on creation ("X-Object-Manifest") which includes the container and prefix
+      - later retrievals of the "manifest" will return the full-length "logical" object
+      - note: any object can be segmented since segments have a minimum size of 1-byte
+      - also: extra segments can be added w/out updating the manifest, growing the size of the file (and possibly re-ordering its data)
+      - returned "ETag" on manifest is MD5 sum of the concatenated string of the ETags for each segment
+    parts of objects may be retrieved instead of the whole thing using the optional "Range" header
+    objects may optionally be set to automatically expire (using "X-Delete-At" or "X-Delete-After" headers when creating or updating)
+    metadata (through extra HTTP headers) can be set and then read on containers:
+      - Arbitrary key/value pairs using any header prefixed with: "X-Container-Meta-"
+    container metadata limits: 90-items max, 4096-bytes overall max, 128 minus 17 byte name length limit, 256 byte max value limit
+    metadata (through extra HTTP headers) can be set and then read on objects:
+      - Arbitrary key/value pairs using any header prefixed with: "X-Object-Meta-"
+      - CORS headers (http://www.w3.org/TR/access-control/) including:
+        * Access-Control-Allow-Credentials
+        * Access-Control-Allow-Methods
+        * Access-Control-Allow-Origin
+        * Access-Control-Expose-Headers
+        * Access-Control-Max-Age
+        * Access-Control-Request-Headers
+        * Access-Control-Request-Method
+        * Origin
+    all objects have a "Content-Type" (as per standard HTTP) and so files in this silo-type directly store a mime-type with files
+    objects can be stored compressed by using the "Content-Encoding" header but this solely acts as extra meta-data as it will be retrieved compressed too
+    objects can have a "Content-Disposition" set so if directly requested by a browser you can control whether it tries to display or download/save the object
+    create, read, update, and destroy containers (must be empty to destroy)
+    create, read, update, and destroy objects
+    directly copy one object to another new object server-side
+    thus, "moving" an object is supported by doing a "copy" followed by a "destroy" of the original
+    directly retrieve number of objects and total bytes used per container
+    directly list containers and objects w/in containers
+    directly retrieve object size, MD5 hash, and the date/time when it was last modified
+    object writes can be verified on server end by providing "ETag" header (MD5 sum) or on client as the response will include server-provided ETag (MD5) for comparison
+    direct access to objects w/in a container can be granted by setting "X-Container-Read" header: http://swift.openstack.org/misc.html#acls
+      NOTE: this MAY be a way for this storage type to have Content Delivery Network (CDN) properties
+    ACL Support:
+      based on referrer header, which may include sub-domain wildcards or just be global ("*")
+      our support of access will include read access only and only to "everyone", otherwise no access granted, making it "private"
+ 
+Amazon S3
+  Storage
+    files called "objects"
+    locations called "buckets"
+    object sizes supported: from 1-byte to 5-terabytes inclusive
+    unlimited number of objects
+    buckets has a "region" associated with it which determines which data centers it's physically stored in (can be optimized for latency/cost/regulations)
+    a BitTorrent protocol interface is available (*)
+    simulates "folders" within a bucket by creating 0-byte objects with a "/" at the end of its name
+    treats the "/" as a special delimiter for listing operations
+    calls object names "keys"
+    supports versioning objects with a version ID
+    atomic and eventually consistent
+    objects may be publicly available, providing CDN-like functionality
+    supports server-side encryption w/server-side key management; not supported by dax
+    parts of objects may be retrieved instead of the whole thing using the optional "Range" header
+    object metadata includes:
+      - HTTP metadata, including:
+        * Content-Type
+      - Custom
+      - date last modified
+
+    ACL Support:
+      amazon has several options, the only bit we'll expose/support is to make objects public or keep them private
+
+
